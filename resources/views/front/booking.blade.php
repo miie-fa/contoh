@@ -1,442 +1,164 @@
 @extends('front.layout.app')
 
-@section('title', 'Halman Kontak Detail - ' . env('APP_NAME'))
-
-@push('css-custom')
-    <style>
-        .sidebar {
-            height: auto;
-            overflow-y: auto;
-            overflow-x: hidden;
-            position: -webkit-sticky;
-            position: sticky;
-            top: 15%;
-        }
-
-        .iti { width: 100%; }
-    </style>
-@endpush
+@section('title', 'Pemesanan')
 
 @section('content')
-<section class="relative">
-    <img src="https://images.unsplash.com/photo-1583037189850-1921ae7c6c22?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mjk2fHxob3RlbCUyMGxvYmJ5fGVufDB8fDB8fHww&auto=format&fit=crop&w=1470&h=300" alt="banner" class="max-w-full mx-auto filter brightness-50">
-    <div class="absolute inset-0 flex items-center justify-center">
-        <span class="px-1 py-1 text-lg font-bold text-white md:px-5 md:text-5xl md:py-7 text-center">Contact and Billing Details</span>
-    </div>
-</section>
-
-@if(session()->has('cart_room_id'))
-@php
-    $arr_cart_room_id = session()->get('cart_room_id', []);
-    $arr_cart_checkin_date = session()->get('cart_checkin_date', []);
-    $arr_cart_checkout_date = session()->get('cart_checkout_date', []);
-    $arr_cart_adult = session()->get('cart_adult', []);
-    $arr_cart_children = session()->get('cart_children', []);
-    $total_price = 0;
-    $total_item = count($arr_cart_room_id);
-@endphp
-@endif
-<section class="mx-auto max-w-screen-x">
+    <section class="max-w-screen-xl mx-auto">
         <div class="flex flex-col justify-around p-6 lg:px-24">
-            <h2 class="mb-10 font-semibold text-gray-800 lg:w-3/5 lg:text-3xl">Contact and Billing Details</h2>
-
-            <div class="grid grid-cols-1 gap-6 mt-4 mb-10 md:grid-cols-12">
+            <h2 class="mb-10 font-semibold text-gray-800 lg:w-3/5 lg:text-3xl">Isi dan lengkapilah form reservasi dibawah dengan baik dan benar!</h2>
+            <p class="text-sm font-normal text-sub">Login atau daftar untuk pemesanan lebih cepat *</p>
+            <div class="grid grid-cols-1 gap-6 mt-4 mb-10 md:grid-cols-5">
                 <!-- Form Pemesanan -->
-
-                    <div class="lg:col-span-8">
-                        @auth
-                            @php
-                                if(session()->has('billing_name')) {
-                                    $billing_name = session()->get('billing_name');
-                                } else {
-                                    $billing_name = Auth::user()->name;
-                                }
-
-                                if(session()->has('billing_email')) {
-                                    $billing_email = session()->get('billing_email');
-                                } else {
-                                    $billing_email = Auth::user()->email;
-                                }
-
-                                if(session()->has('billing_phone')) {
-                                    $billing_phone = session()->get('billing_phone');
-                                } else {
-                                    $billing_phone = Auth::user()->phone;
-                                }
-
-                                if(session()->has('billing_country')) {
-                                    $billing_country = session()->get('billing_country');
-                                } else {
-                                    $billing_country = Auth::user()->country;
-                                }
-
-                                if(session()->has('billing_address')) {
-                                    $billing_address = session()->get('billing_address');
-                                } else {
-                                    $billing_address = Auth::user()->address;
-                                }
-
-                                if(session()->has('billing_notes')) {
-                                    $billing_notes = session()->get('billing_notes');
-                                } else {
-                                    $billing_notes = Auth::user()->state;
-                                }
-                            @endphp
-                        @endauth
-                        <div>
-                            <h2 class="mb-5 text-lg font-medium text-gray-800 dark:text-white">Billing Details</h2>
-                            @auth
-                            <div class="p-4 mt-6 mb-4 text-sm text-green-800 bg-green-200 rounded-lg" role="alert">
-                                <div class="flex justify-between">
-                                    <div><i class="p-1 bg-gray-300 rounded-full fa-solid fa-check me-2"></i>Logged in as, {{ Auth::user()->name }}!</div>
-                                    <a href="{{ route('logout') }}">Logout</a>
-                                </div>
+                <div class="col-span-3 p-6 bg-gray-100 shadow-md">
+                    <form>
+                        <div class="mb-4">
+                            <label for="nama" class="text-[1.3em] font-medium text-gray-800">Info Kontak</label>
+                            <div class="grid grid-cols-2 gap-4">
+                                <input type="text" id="nama" name="nama" placeholder="Nama Depan*" class="w-full p-2 mt-2 border border-gray-300 focus:outline-none focus:ring-1 focus:border-cyan-950">
+                                <input type="text" id="nama" name="nama" placeholder="Nama Belakang*" class="w-full p-2 mt-2 border border-gray-300 focus:outline-none focus:ring-1 focus:border-cyan-950">
+                                <input type="text" id="nama" name="nama" placeholder="Email*" class="w-full p-2 mt-2 border border-gray-300 focus:outline-none focus:ring-1 focus:border-cyan-950">
+                                <input type="text" id="nama" name="nama" placeholder="Nomor Telepon*" class="w-full p-2 mt-2 border border-gray-300 focus:outline-none focus:ring-1 focus:border-cyan-950">
+                                <span class="text-[12px] italic font-normal text-sub -mt-2">Email ini akan menjadi tujuan pengiriman konfirmasi Anda.</span>
                             </div>
-                            <div>
-                                <form class="">
-                                    <div class="mb-4">
-                                        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-                                            <input type="text" id="name" name="billing_name" value="{{ $billing_name }}" class="w-full p-2 mt-2 border border-gray-300 rounded-md md:col-span-2 focus:outline-none focus:ring-1 focus:border-cyan-950">
-                                            <input type="text" id="email" name="billing_email" placeholder="Email*" value="{{ $billing_email }}" class="w-full p-2 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:border-cyan-950">
-                                            <input type="text" id="phone" name="billing_phone" placeholder="Phone" value="{{ $billing_phone }}" class="w-full p-2 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:border-cyan-950">
-                                            <span class="text-[12px] italic font-normal text-sub -mt-2">Email ini akan menjadi tujuan pengiriman konfirmasi Anda.</span>
-                                        </div>
-                                    </div>
-                                    <div class="mb-4">
-                                        <label for="nama" class="text-[1.3em] font-medium text-gray-800">Alamat</label>
-                                        <div class="w-full mb-3">
-                                            <select id="country" name="billing_country" class="w-2/4 p-2 mt-2 text-black placeholder-gray-400 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:border-cyan-950" id="">
-                                                <option class="" selected>{{ $billing_country ?? 'Pilih Negara' }}</option>
-                                                <option value="indonesia">Indonesia</option>
-                                            </select>
-                                        </div>
-                                        <textarea id="address" name="billing_address" rows="4" class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:border-cyan-950" placeholder="Alamat Tempat Tinggal Sekarang (Optional)">{{ $billing_address }}</textarea>
-                                    </div>
-                                    <div class="mb-4">
-                                        <label for="detail" class="text-[1.3em] font-medium text-gray-800">Additional Notes <span class="text-sub">(optional)</span></label>
-                                        <textarea id="detail" name="billing_notes" rows="4" class="w-full p-2 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:border-cyan-950" ></textarea>
-                                    </div>
-                                </form>
-                            </div>
-                            @else
-                            <span class="text-sm font-normal text-sub">Login atau daftar untuk pemesanan lebih cepat *</span>
-                            <div class="mt-3 mb-4 border-b border-gray-200 dark:border-gray-700">
-                                <ul class="grid grid-cols-3 -mb-px text-sm font-medium text-center" id="myTab" data-tabs-toggle="#myTabContent" role="tablist">
-                                    <li class="" role="presentation">
-                                        <button class="inline-block p-4 border-b-2 rounded-t-lg" id="profile-tab" data-tabs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Existing Customer Login</button>
-                                    </li>
-                                    <li class="" role="presentation">
-                                        <button class="inline-block p-4 border-b-2 rounded-t-lg" id="dashboard-tab" data-tabs-target="#dashboard" type="button" role="tab" aria-controls="dashboard" aria-selected="false">Create new Account</button>
-                                    </li>
-                                    <li class="" role="presentation">
-                                        <button class="inline-block p-4 border-b-2 rounded-t-lg" id="settings-tab" data-tabs-target="#settings" type="button" role="tab" aria-controls="settings" aria-selected="false">Checkout as Guest</button>
-                                    </li>
-                                </ul>
-                            </div>
-
-                            <div id="myTabContent">
-
-                                {{-- Login --}}
-                                <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                                    <form action="{{ route('login.process') }}" method="POST">
-                                        @csrf
-                                        <div class="mb-6">
-                                            <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
-                                            <input type="email" id="email" name="email" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" placeholder="Email Address" required>
-                                        </div>
-                                        <div class="mb-6">
-                                            <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
-                                            <input type="password" id="password" name="password" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" placeholder="Password" required>
-                                        </div>
-                                        <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Login</button>
-                                    </form>
-                                </div>
-
-                                {{-- Register --}}
-                                <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="dashboard" role="tabpanel" aria-labelledby="dashboard-tab">
-                                    <form action="{{ route('register.process') }}" method="POST">
-                                        @csrf
-                                        @method('POST')
-                                        <div class="mb-6">
-                                            <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your Name</label>
-                                            <input name="name" type="text" id="name" value="{{ old('name') }}" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" required>
-                                        </div>
-                                        <div class="mb-6">
-                                            <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email</label>
-                                            <input name="email" type="email" id="email" value="{{ old('email') }}" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" required>
-                                        </div>
-                                        <div class="mb-6">
-                                            <label for="phone" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your Phone</label>
-                                            <input name="phone" type="number" id="phone" value="{{ old('phone') }}" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" required>
-                                        </div>
-                                        <div class="mb-6">
-                                            <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your password</label>
-                                            <input name="password" type="password" id="password" value="{{ old('password') }}" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" required>
-                                        </div>
-                                        <div class="mb-6">
-                                            <label for="repeat-password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Repeat password</label>
-                                            <input name="password_confirmation" type="password" id="repeat-password" value="{{ old('password_confirmation') }}" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" required>
-                                        </div>
-                                        <div class="flex items-start mb-6">
-                                            <div class="flex items-center h-5">
-                                                <input id="terms" type="checkbox" value="" class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800" required>
-                                            </div>
-                                            <label for="terms" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">I agree with the <a href="#" class="text-blue-600 hover:underline dark:text-blue-500">terms and conditions</a></label>
-                                        </div>
-                                        <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Register new account</button>
-                                    </form>
-                                </div>
-
-                                {{-- New Guest --}}
-                                <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="settings" role="tabpanel" aria-labelledby="settings-tab">
-                                    <form class="">
-                                        <div class="mb-4">
-                                            <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-                                                <input type="text" id="billing_name" name="billing_name" value=""  placeholder="Nama*" class="w-full p-2 mt-2 border border-gray-300 rounded-md md:col-span-2 focus:outline-none focus:ring-1 focus:border-cyan-950">
-                                                <input type="text" id="billing_email" name="billing_email" placeholder="Email*" value="" class="w-full p-2 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:border-cyan-950">
-                                                <input type="text" id="billing_phone" name="billing_phone" placeholder="Nomor Telepon*" class="w-full p-2 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:border-cyan-950">
-                                                <span class="text-[12px] italic font-normal text-sub -mt-2">Email ini akan menjadi tujuan pengiriman konfirmasi Anda.</span>
-                                            </div>
-                                        </div>
-                                        <div class="mb-4">
-                                            <label for="nama" class="text-[1.3em] font-medium text-gray-800">Alamat</label>
-                                            <div class="w-full mb-3 rounded-md">
-                                                <select id="billing_country" name="billing_country" class="w-2/4 p-2 mt-2 text-black placeholder-gray-400 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:border-cyan-950" id="">
-                                                    <option class="" selected disabled>Negara*</option>
-                                                    <option value="indonesia">Indonesia</option>
-                                                </select>
-                                            </div>
-                                            <textarea id="billing_address" name="billing_address" rows="4" class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:border-cyan-950" placeholder="Alamat Tempat Tinggal Sekarang (Optional)"></textarea>
-                                        </div>
-                                        <div class="mb-4">
-                                            <label for="billing_notes" class="text-[1.3em] font-medium text-gray-800">Detail dan Preferensi Tambahan <span class="text-sub">(optional)</span></label>
-                                            <textarea id="billing_notes" name="billing_notes" rows="4" class="w-full p-2 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:border-cyan-950" placeholder="Alamat Tempat Tinggal Sekarang (Optional)"></textarea>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-
-                            <div class="flex items-start mt-6">
-                                <div class="flex items-center h-5">
-                                    <input id="terms" type="checkbox" value="" class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800" required>
-                                </div>
-                                <label for="terms" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">I agree with the <a href="#" class="text-blue-600 hover:underline dark:text-blue-500">terms and conditions</a></label>
-                            </div>
-                            @endauth
                         </div>
-                    </div>
+                        <div class="mb-4">
+                            <label for="nama" class="text-[1.3em] font-medium text-gray-800">Alamat</label>
+                            <div class="w-full mb-3">
+                                <select name="" class="w-2/4 p-2 mt-2 text-black placeholder-gray-400 border border-gray-300 focus:outline-none focus:ring-1 focus:border-cyan-950" id="">
+                                    <option class="" selected>Negara*</option>
+                                    <option value="ID">Indonesia</option>
+                                    <option value="US">United States</option>
+                                    <option value="CA">Canada</option>
+                                    <option value="FR">France</option>
+                                    <option value="DE">Germany</option>
+                                </select>
+                            </div>
+                            <textarea id="message" rows="4" class="w-full p-2 border border-gray-300 focus:outline-none focus:ring-1 focus:border-cyan-950" placeholder="Alamat Tempat Tinggal Sekarang (Optional)"></textarea>
+                        </div>
+                        <div class="mb-4">
+                            <label for="detail" class="text-[1.3em] font-medium text-gray-800">Detail dan Preferensi Tambahan <span class="text-sub">(optional)</span></label>
+                            <textarea id="detail" rows="4" class="w-full p-2 mt-2 border border-gray-300 focus:outline-none focus:ring-1 focus:border-cyan-950" placeholder="Alamat Tempat Tinggal Sekarang (Optional)"></textarea>
+                        </div>
+                    </form>
+                </div>
 
                 <!-- Ringkasan Pemesanan -->
-                <form class="lg:col-span-4 sidebar" action="{{ route('payment') }}" method="POST">
-                @csrf
-
-                <div>
-                    @if (!empty($arr_cart_room_id))
-                    @php
-                        $arr_cart_room_id = array();
-                        $i=0;
-                        foreach(session()->get('cart_room_id') as $value) {
-                            $arr_cart_room_id[$i] = $value;
-                            $i++;
-                        }
-
-                        $arr_cart_checkin_date = array();
-                        $i=0;
-                        foreach(session()->get('cart_checkin_date') as $value) {
-                            $arr_cart_checkin_date[$i] = $value;
-                            $i++;
-                        }
-
-                        $arr_cart_checkout_date = array();
-                        $i=0;
-                        foreach(session()->get('cart_checkout_date') as $value) {
-                            $arr_cart_checkout_date[$i] = $value;
-                            $i++;
-                        }
-
-                        $arr_cart_adult = array();
-                        $i=0;
-                        foreach(session()->get('cart_adult') as $value) {
-                            $arr_cart_adult[$i] = $value;
-                            $i++;
-                        }
-
-                        $arr_cart_children = array();
-                        $i=0;
-                        foreach(session()->get('cart_children') as $value) {
-                            $arr_cart_children[$i] = $value;
-                            $i++;
-                        }
-
-                        $total_price = 0;
-                        for($i=0;$i<count($arr_cart_room_id);$i++)
-                        {
-                        $room_data = DB::table('rooms')->where('id',$arr_cart_room_id[$i])->first();
-                    @endphp
-                    <div class="flex justify-between px-2 mt-2 mb-2">
-                        <span class="text-sm font-semibold">Sub Total Room {{ $arr_cart_room_id[$i] }}</span>
-                        <span class="text-sm font-semibold text-gray-700">
-                            @php
-                                $d1 = explode('/',$arr_cart_checkin_date[$i]);
-                                $d2 = explode('/',$arr_cart_checkout_date[$i]);
-                                $d1_new = $d1[2].'-'.$d1[1].'-'.$d1[0];
-                                $d2_new = $d2[2].'-'.$d2[1].'-'.$d2[0];
-                                $t1 = strtotime($d1_new);
-                                $t2 = strtotime($d2_new);
-                                $diff = ($t2-$t1)/60/60/24;
-                                echo 'Rp '.number_format($room_data->price*$diff, 0, ',', '.');
-                            @endphp
-                        </span>
-                    </div>
-                    @php
-                        $total_price = $total_price+($room_data->price*$diff);
-                    }
-                    @endphp
-                        <div class="px-2 mt-8 border-t">
-                            <div class="flex justify-between py-6 font-semibold text-md">
-                                <span>Grand Total</span>
-                                <span>Rp {{ number_format($total_price, 0, ',', '.') ?? 0 }}</span>
+                <div class="col-span-2 ">
+                    <div class="h-auto bg-gray-100 shadow-md p-7">
+                        <h2 class="mb-4 text-2xl font-medium">Ringkasan Pemesanan</h2>
+                        <div class="mb-4">
+                            <div class="flex">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M9 1V3H15V1H17V3H21C21.5523 3 22 3.44772 22 4V20C22 20.5523 21.5523 21 21 21H3C2.44772 21 2 20.5523 2 20V4C2 3.44772 2.44772 3 3 3H7V1H9ZM20 10H4V19H20V10ZM15.0355 11.136L16.4497 12.5503L11.5 17.5L7.96447 13.9645L9.37868 12.5503L11.5 14.6716L15.0355 11.136ZM7 5H4V8H20V5H17V6H15V5H9V6H7V5Z" fill="#162034"/>
+                                </svg>
+                                <span class="text-sub text-light ms-1">Check In</span>
+                            </div>
+                            <input type="text" id="small-input" class="block w-full p-2 mt-2 text-gray-900 border border-gray-300 bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        </div>
+                        <div class="mb-4">
+                            <div class="flex">
+                                <svg width="21" height="20" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M7.3999 2V0H5.3999V2H1.3999C0.847622 2 0.399902 2.44772 0.399902 3V19C0.399902 19.5523 0.847622 20 1.3999 20H19.3999C19.9522 20 20.3999 19.5523 20.3999 19V3C20.3999 2.44772 19.9522 2 19.3999 2H15.3999V0H13.3999V2H7.3999ZM2.3999 9H18.3999V18H2.3999V9ZM2.3999 4H5.3999V5H7.3999V4H13.3999V5H15.3999V4H18.3999V7H2.3999V4ZM8.27852 9.9644L10.3999 12.0858L12.5211 9.9644L13.9354 11.3785L11.8141 13.5001L13.9353 15.6212L12.5212 17.0354L10.3999 14.9143L8.27845 17.0354L6.86432 15.6211L8.9856 13.5001L6.86426 11.3785L8.27852 9.9644Z" fill="#162034"/>
+                                </svg>
+                                <span class="text-sub text-light ms-1">Check Out</span>
+                            </div>
+                            <input type="text" id="small-input" class="block w-full p-2 mt-2 text-gray-900 border border-gray-300 bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        </div>
+                        <div class="mb-4">
+                            <div class="flex">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M21 19H23V21H1V19H3V4C3 3.44772 3.44772 3 4 3H14C14.5523 3 15 3.44772 15 4V19H19V11H17V9H20C20.5523 9 21 9.44772 21 10V19ZM5 5V19H13V5H5ZM7 11H11V13H7V11ZM7 7H11V9H7V7Z" fill="#162034"/>
+                                </svg>
+                                <span class="text-sub text-light ms-1">Hotel</span>
+                            </div>
+                            <p class="text-gray-700">Hotel Citra Megah Bali, Standard Room</p>
+                            <hr class="h-px my-1 bg-gray-800 border-2 rounded-lg ">
+                            <div class="flex justify-between">
+                                <span class="font-light text-sub">1 malam</span>
+                                <span class="font-semibold">Rp 400.000</span>
                             </div>
                         </div>
-                    @else
-                        @php
-                            session()->flash('error', 'Keranjang belanja kosong.');
-                        @endphp
-                        <script>window.location = "{{ route('home') }}";</script>
-                    @endif
-                    <button type="submit" class="w-full py-3 mt-5 font-bold text-white uppercase bg-cyan-950 hover:bg-cyan-900">PAY NOW</button>
-                </div>
-                <div class="hidden">
-                    @auth
-                        @php
-                            if(session()->has('billing_name')) {
-                                $billing_name = session()->get('billing_name');
-                            } else {
-                                $billing_name = Auth::user()->name;
-                            }
-
-                            if(session()->has('billing_email')) {
-                                $billing_email = session()->get('billing_email');
-                            } else {
-                                $billing_email = Auth::user()->email;
-                            }
-
-                            if(session()->has('billing_phone')) {
-                                $billing_phone = session()->get('billing_phone');
-                            } else {
-                                $billing_phone = Auth::user()->phone;
-                            }
-
-                            if(session()->has('billing_country')) {
-                                $billing_country = session()->get('billing_country');
-                            } else {
-                                $billing_country = Auth::user()->country;
-                            }
-
-                            if(session()->has('billing_address')) {
-                                $billing_address = session()->get('billing_address');
-                            } else {
-                                $billing_address = Auth::user()->address;
-                            }
-
-                            if(session()->has('billing_notes')) {
-                                $billing_notes = session()->get('billing_notes');
-                            } else {
-                                $billing_notes = Auth::user()->state;
-                            }
-                        @endphp
-                    @endauth
-                    <div>
-                        <h2 class="mb-5 text-lg font-medium text-gray-800 dark:text-white">Billing Details</h2>
-                        @auth
-                        <div class="p-4 mt-6 mb-4 text-sm text-green-800 bg-green-200 rounded-lg" role="alert">
-                            <div class="flex justify-between">
-                                <div><i class="p-1 bg-gray-300 rounded-full fa-solid fa-check me-2"></i>Logged in as, {{ Auth::user()->name }}!</div>
-                                <a href="{{ route('logout') }}">Logout</a>
+                        <div class="mb-4">
+                            <div class="flex">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M4 3H20C20.5523 3 21 3.44772 21 4V20C21 20.5523 20.5523 21 20 21H4C3.44772 21 3 20.5523 3 20V4C3 3.44772 3.44772 3 4 3ZM5 5V19H19V5H5ZM11 11V7H13V11H17V13H13V17H11V13H7V11H11Z" fill="#162034"/>
+                                </svg>
+                                <span class="text-sub text-light ms-1">Tambah rencana penginapan</span>
+                            </div>
+                            <select id="underline_select" class="block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
+                                <option selected>Choose a plan</option>
+                                <option value="US">Spa dan Gebugaran - Dewasa</option>
+                                <option value="CA">Canada</option>
+                                <option value="FR">France</option>
+                                <option value="DE">Germany</option>
+                            </select>
+                            <div class="flex justify-between mt-1">
+                                <div class="flex items-center justify-center space-x-4">
+                                    <button id="decrease" class="text-gray-700 ">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M5 11V13H19V11H5Z" fill="#162034"/>
+                                        </svg>
+                                    </button>
+                                    <span id="count" class="text-sub">0</span>
+                                    <button id="increase" class="text-gray-700 ">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M11 11V5H13V11H19V13H13V19H11V13H5V11H11Z" fill="#162034"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <span class="font-semibold">Rp 400.000</span>
                             </div>
                         </div>
                         <div>
-                            <form class="">
-                                <div class="mb-4">
-                                    <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-                                        <input type="text" id="name" name="billing_name" value="{{ $billing_name }}" class="w-full p-2 mt-2 border border-gray-300 rounded-md md:col-span-2 focus:outline-none focus:ring-1 focus:border-cyan-950">
-                                        <input type="text" id="email" name="billing_email" placeholder="Email*" value="{{ $billing_email }}" class="w-full p-2 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:border-cyan-950">
-                                        <input type="text" id="phone" name="billing_phone" placeholder="Phone" value="{{ $billing_phone }}" class="w-full p-2 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:border-cyan-950">
-                                        <span class="text-[12px] italic font-normal text-sub -mt-2">Email ini akan menjadi tujuan pengiriman konfirmasi Anda.</span>
-                                    </div>
-                                </div>
-                                <div class="mb-4">
-                                    <label for="nama" class="text-[1.3em] font-medium text-gray-800">Alamat</label>
-                                    <div class="w-full mb-3">
-                                        <select id="country" name="billing_country" class="w-2/4 p-2 mt-2 text-black placeholder-gray-400 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:border-cyan-950" id="">
-                                            <option class="" selected>{{ $billing_country ?? 'Pilih Negara' }}</option>
-                                            <option value="indonesia">Indonesia</option>
-                                        </select>
-                                    </div>
-                                    <textarea id="address" name="billing_address" rows="4" class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:border-cyan-950" placeholder="Alamat Tempat Tinggal Sekarang (Optional)">{{ $billing_address }}</textarea>
-                                </div>
-                                <div class="mb-4">
-                                    <label for="detail" class="text-[1.3em] font-medium text-gray-800">Additional Notes <span class="text-sub">(optional)</span></label>
-                                    <textarea id="detail" name="billing_notes" rows="4" class="w-full p-2 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:border-cyan-950" ></textarea>
-                                </div>
-                            </form>
+                            <div class="flex justify-between">
+                                <span>Jumlah Orang :</span>
+                                <span>2 Dewasa, 1 Anak</span>
+                            </div>
+                            <hr class="my-1 border border-dashed border-cyan-600">
+                            <div class="flex justify-between">
+                                <span class="text-xl font-medium">Total:</span>
+                                <span class="text-xl font-medium">Rp 400.000</span>
+                            </div>
                         </div>
-                        @endauth
+                    </div>
+                    <button id="customButton" class="w-full py-3 mt-5 font-bold text-white uppercase bg-cyan-950 hover:bg-cyan-900">Booking</button>
+                </div>
+
+                {{-- Kebijakan --}}
+                <div class="col-span-3">
+                    <div class="h-auto bg-gray-100 shadow-md p-7">
+                        <h2 class="mb-4 text-2xl font-medium">Kebijakan:</h2>
+                        <div class="grid grid-cols-3 mb-2">
+                            <span class="col-span-1 font-light">Check In :</span>
+                            <span class="col-span-2 font-medium">Minggu, 20.00 - 16 July 2023</span>
+                        </div>
+                        <div class="grid grid-cols-3 mb-2">
+                            <span class="col-span-1 font-light">Check Out :</span>
+                            <span class="col-span-2 font-medium">Senin, 20.00 - 17 July 2023</span>
+                        </div>
+                        <div class="grid grid-cols-3 mb-5">
+                            <span class="col-span-1 font-light">Hotel</span>
+                            <span class="col-span-2 font-medium">Hotel Citra Megah Bali, Standard Room</span>
+                        </div>
+                        <div class="flex flex-col mb-5">
+                            <span class="font-medium uppercase">Kebijakan garansi</span>
+                            <span class="font-light text-sub">Pay At Hotel (Bayar di Jotel)</span>
+                        </div>
+                        <div class="flex flex-col mb-3">
+                            <span class="font-medium uppercase">KEBIJAKAN PEMBATALAN</span>
+                            <span class="font-light text-sub">Tidak Dapat Dikembalikan - 100% dari jumlah total akan dibebankan pada saat pemesanan.</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </form>
-</section>
+    </section>
 @endsection
 
 @push('js-custom')
-    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-element-bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.20/dist/sweetalert2.all.min.js"></script>
     <script>
-        const input = document.querySelector("#phone");
-        window.intlTelInput(input, {
-            initialCountry: "auto",
-            geoIpLookup: callback => {
-                fetch("https://ipapi.co/json")
-                .then(res => res.json())
-                .then(data => callback(data.country_code))
-                .catch(() => callback("us"));
-            },
-            utilsScript: "/intl-tel-input/js/utils.js?1695806485509" // just for formatting/placeholders etc
-        });
-
-        const tabElements = [
-            {
-                id: 'profile',
-                triggerEl: document.querySelector('#profile-tab-example'),
-                targetEl: document.querySelector('#profile-example')
-            },
-            {
-                id: 'dashboard',
-                triggerEl: document.querySelector('#dashboard-tab-example'),
-                targetEl: document.querySelector('#dashboard-example')
-            },
-            {
-                id: 'settings',
-                triggerEl: document.querySelector('#settings-tab-example'),
-                targetEl: document.querySelector('#settings-example')
-            },
-            {
-                id: 'contacts',
-                triggerEl: document.querySelector('#contacts-tab-example'),
-                targetEl: document.querySelector('#contacts-example')
-            }
-        ];
-
-        // options with default values
-        const options = {
-            defaultTabId: 'settings',
-            activeClasses: 'text-blue-600 hover:text-blue-600 dark:text-blue-500 dark:hover:text-blue-400 border-blue-600 dark:border-blue-500',
-            inactiveClasses: 'text-gray-500 hover:text-gray-600 dark:text-gray-400 border-gray-100 hover:border-gray-300 dark:border-gray-700 dark:hover:text-gray-300',
-            onShow: () => {
-                console.log('tab is shown');
-            }
-        };
+        const customButton = document.getElementById('customButton');
 
         customButton.addEventListener('click', () => {
             Swal.fire({
@@ -463,69 +185,24 @@
         });
 
         const openModalButton = document.getElementById('openModalButton');
-        const closeModalButton = document.getElementById('closeModalButton');
-        const modal = document.getElementById('myModal');
-        const overlay = document.getElementById('overlay');
+    const closeModalButton = document.getElementById('closeModalButton');
+    const modal = document.getElementById('myModal');
+    const overlay = document.getElementById('overlay');
 
-        openModalButton.addEventListener('click', () => {
-            modal.classList.remove('opacity-0', 'pointer-events-none', 'scale-95');
-            overlay.classList.remove('opacity-0', 'pointer-events-none');
-            modal.classList.add('opacity-100', 'scale-100');
-            overlay.classList.add('opacity-50');
-        });
+    openModalButton.addEventListener('click', () => {
+        modal.classList.remove('opacity-0', 'pointer-events-none', 'scale-95');
+        overlay.classList.remove('opacity-0', 'pointer-events-none');
+        modal.classList.add('opacity-100', 'scale-100');
+        overlay.classList.add('opacity-50');
+    });
 
-        closeModalButton.addEventListener('click', () => {
-            modal.classList.remove('opacity-100', 'scale-100');
-            overlay.classList.remove('opacity-50');
-            setTimeout(() => {
-                modal.classList.add('opacity-0', 'pointer-events-none', 'scale-95');
-                overlay.classList.add('opacity-0', 'pointer-events-none');
-            }, 300);
-        });
-
-        $(document).ready(function() {
-            $("#pesan").on("click", function() {
-                const userId = $("#user_id").text();
-                const name = $("#name").text();
-                const email = $("#email").text();
-                const phone = $("#phone").text();
-                const country = $("#country").text();
-                const address = $("#address").text();
-                const orderNo = $("#orderNo").text();
-
-                $.ajax({
-                    type: "POST",
-                    url: "{{ route('proses_pemesanan') }}",
-                    data: {
-                        name: name,
-                        email: email,
-                        phone: phone,
-                        country: country,
-                        address: address,
-                        _token: "{{ csrf_token() }}"
-                    },
-                    success: function(response) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Pemesanan Berhasil',
-                            text: 'Pemesanan berhasil dilakukan!',
-                            showCancelButton: true,
-                            confirmButtonText: 'Lanjut',
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                window.location.href = "/booking/  ";
-                            }
-                        });
-                    },
-                    error: function(xhr, status, error) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Pemesanan Gagal',
-                            text: 'Terjadi kesalahan saat melakukan pemesanan.',
-                        });
-                    }
-                });
-            });
-        });
+    closeModalButton.addEventListener('click', () => {
+        modal.classList.remove('opacity-100', 'scale-100');
+        overlay.classList.remove('opacity-50');
+        setTimeout(() => {
+            modal.classList.add('opacity-0', 'pointer-events-none', 'scale-95');
+            overlay.classList.add('opacity-0', 'pointer-events-none');
+        }, 300);
+    });
     </script>
 @endpush
